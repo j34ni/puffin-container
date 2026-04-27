@@ -2,18 +2,27 @@
 
 Container image for [SCINE Puffin](https://github.com/qcscine/puffin), the calculation handler for [SCINE Chemoton](https://github.com/qcscine/chemoton).
 
-## Differences from the official Dockerfile
+This is a **modified version** of the official Puffin Dockerfile, optimized for AMD CPUs.
 
-The [official SCINE Puffin Dockerfile](https://github.com/qcscine/puffin/blob/master/container/docker/Dockerfile) uses Intel MKL (Math Kernel Library). While MKL is free to use, it deliberately underperforms on non-Intel CPUs, and the target machines here have AMD CPUs. This image uses OpenBLAS instead, which is fully open source and performs consistently across all x86_64 hardware.
+## Key Differences from the Official Dockerfile
 
-Other changes:
-- `-march=native` removed to ensure the image runs on any CPU, not just the build machine
-- `OMP_NUM_THREADS` made dynamic via environment variable (the official image hardcodes it to 1)
-- `entrypoint.sh` patches `ip`, `cores`, and `memory` in `puffin.yaml` at container startup from environment variables
+- Replaced Intel MKL with **OpenBLAS** (better and consistent performance on AMD CPUs)
+- Removed `-march=native` for better portability across different machines
+- Made `OMP_NUM_THREADS` configurable via environment variable (official version hardcodes it to 1)
+- Added `entrypoint.sh` that dynamically patches `ip`, `cores`, and `memory` in `puffin.yaml` at container startup
+
+## License
+
+This repository contains a modified version of files from the [qcscine/puffin](https://github.com/qcscine/puffin) project.
+
+The original work is Copyright (c) ETH Zurich, Department of Chemistry and Applied Biosciences, Reiher Group and licensed under the **BSD-3-Clause** license.  
+This derivative work is released under the **same BSD-3-Clause license**.
+
+See the [LICENSE](LICENSE) file for the full license text.
 
 ## Image
 
-The image is built automatically by GitHub Actions and published to GHCR:
+The image is automatically built by GitHub Actions and published to GitHub Container Registry (GHCR):
 
 ```bash
 docker pull ghcr.io/j34ni/puffin-container:latest
